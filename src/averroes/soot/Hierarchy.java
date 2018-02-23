@@ -31,9 +31,8 @@ import soot.SootMethod;
 import soot.Type;
 import soot.VoidType;
 import soot.coffi.AverroesApplicationConstantPool;
+import soot.jimple.infoflow.entryPointCreators.AndroidEntryPointUtils;
 import soot.tagkit.Tag;
-import averroes.android.AndroidEntryPointConstants;
-import averroes.android.AndroidEntryPointCreator;
 import averroes.options.AverroesOptions;
 
 /**
@@ -359,15 +358,11 @@ public class Hierarchy {
 	 */
 	public boolean isBasicLibraryMethod(SootMethod method) {
 		String sig = method.getSignature();
-		return method.isConstructor() || isLifeCycle(method) || isStaticInitializer(method) || sig.equals(Names.FOR_NAME_SIG)
+		AndroidEntryPointUtils m = new AndroidEntryPointUtils();
+		return method.isConstructor() || m.isEntryPointMethod(method)|| isStaticInitializer(method) || sig.equals(Names.FOR_NAME_SIG)
 				|| sig.equals(Names.NEW_INSTANCE_SIG) || sig.equals(Names.FINALIZE_SIG);
 	}
 	
-	private boolean isLifeCycle(SootMethod method) {
-		// TODO: Refactor (e.g. store the method signatures inside this class)?
-		return AndroidEntryPointConstants.isLifecycleClass(method.getDeclaringClass().getName()) &&
-				AndroidEntryPointConstants.getComponentLifecycleMethods().contains(method.getSubSignature());
-	}
 
 	/**
 	 * Check if the given class has a default constructor.

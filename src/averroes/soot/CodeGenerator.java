@@ -46,9 +46,11 @@ import soot.jimple.IntConstant;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Jimple;
 import soot.jimple.JimpleBody;
+import soot.jimple.infoflow.entryPointCreators.AndroidEntryPointCreator;
+import soot.jimple.infoflow.entryPointCreators.AndroidEntryPointUtils;
 import soot.options.Options;
 import soot.util.JasminOutputStream;
-import averroes.android.AndroidEntryPointConstants;
+import soot.jimple.infoflow.entryPointCreators.AndroidEntryPointConstants;
 import averroes.android.SetupAndroid;
 import averroes.options.AverroesOptions;
 import averroes.tamiflex.TamiFlexFactsDatabase;
@@ -594,12 +596,12 @@ public class CodeGenerator {
 		}
 
 	}
-	
 	private boolean isLifeCycle(SootMethod method) {
 		// TODO: Refactor (e.g. store the method signatures inside this class)?
-		return AndroidEntryPointConstants.isLifecycleClass(method.getDeclaringClass().getName()) &&
-				AndroidEntryPointConstants.getComponentLifecycleMethods().contains(method.getSubSignature());
+		AndroidEntryPointUtils m = new AndroidEntryPointUtils();
+		return m.isEntryPointMethod(method);
 	}
+
 
 	/**
 	 * Retrieve all the methods that the library could call back through

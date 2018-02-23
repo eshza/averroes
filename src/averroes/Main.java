@@ -101,9 +101,8 @@ public class Main {
 			SootMethod dummyMain = null;
 			if (AverroesOptions.isAndroid()) {	
 				setupAndroid = SetupAndroid.v();
-				setupAndroid.findXmlCallbacks();
 				dummyMain = setupAndroid.getDummyMainMethod();
-				//Scene.v().setEntryPoints(Arrays.asList(dummyMain));	
+				Scene.v().setEntryPoints(Arrays.asList(dummyMain));	
 			}
 			else {
 				Options.v().classes().addAll(provider.getApplicationClassNames());
